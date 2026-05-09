@@ -4,6 +4,9 @@
 mkdir -p target/linux/msm89xx/dts/
 cp -f "$GITHUB_WORKSPACE/scripts/dts/msm8916.dtsi" "target/linux/msm89xx/dts/msm8916.dtsi"
 
+# mmconfig
+echo "src-git mmconfig https://github.com/erdoukki/luci-app-mmconfig" >> feeds.conf.default
+
 # OpenClash
 # git clone --depth 1 https://github.com/vernesong/OpenClash.git OpenClash
 
