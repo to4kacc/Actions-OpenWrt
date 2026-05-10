@@ -1,4 +1,4 @@
-name: Build_imm_zbtlink_zbt_7620A
+name: Build_imm_zbtlink_zbt
 
 on:
   repository_dispatch:
