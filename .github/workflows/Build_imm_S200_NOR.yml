@@ -1,4 +1,4 @@
-name: Build_imm_SKW97
+name: Build_imm_S200_NOR
 
 on:
   repository_dispatch:
@@ -16,7 +16,7 @@ on:
         type: boolean
 
 env:
-  CONFIG_FILE: 'config/skw97.config'
+  CONFIG_FILE: 'config/glinet_gl-s200-nor.config'
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
@@ -205,9 +205,9 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && steps.organize.outputs.status == 'success'
       run: |
         echo "release_tag=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
-        echo "🚀 OpenWrt firmware for SKW97 WIFI路由模块" >> release.txt
+        echo "🚀 OpenWrt firmware for glinet_gl-s200-nor WIFI路由模块" >> release.txt
         echo "----------------------" >> release.txt
-        echo "设备: SKW97 WIFI路由模块" >> release.txt
+        echo "设备: glinet_gl-s200-nor WIFI路由模块" >> release.txt
         echo "时间: $(date +"%Y-%m-%d %H:%M")" >> release.txt
         echo "内核版本: $(grep -h "kmod-usb2" ${{ env.FIRMWARE }}/*.manifest 2>/dev/null | awk -F' - ' '{print $2}' | grep -oP '6\.[0-9]+\.[0-9]+' | head -1 || echo '未知')" >> release.txt
         echo "源码仓库: ${{ env.REPO_URL }}" >> release.txt
