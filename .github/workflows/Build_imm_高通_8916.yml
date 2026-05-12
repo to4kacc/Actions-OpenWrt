@@ -155,6 +155,10 @@ jobs:
 
         echo "📌 Actual remote of feeds/packages:"
         git -C feeds/packages remote get-url origin
+        
+        echo "📌 Remote HEAD actually used:"
+        git -C feeds/packages ls-remote HEAD || true
+
 
     - name: remove warning
       run: |
