@@ -47,6 +47,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: true
+        
+      - name: Manual Setup Swap
+        run: |
+          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h        
 
       - name: Set dynamic branch and config
         id: dynamic_config
@@ -286,5 +305,5 @@ jobs:
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          retain_days: 7
-          keep_minimum_runs: 5
+          retain_days: 2
+          keep_minimum_runs: 2
