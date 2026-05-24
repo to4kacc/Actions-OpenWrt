@@ -67,7 +67,7 @@ zyxel,keenetic-lite-iii-a|\
 zyxel,keenetic-omni|\
 zyxel,keenetic-omni-ii|\
 zyxel,keenetic-viva)
-	ucidef_set_led_wlan "wifi_led" "wifi" "green:wifi" "phy0tpt"
+	ucidef_set_led_wlan "wifi_led" "wifi" "green:wifi" "phy0tx"
 	;;
 dlink,dwr-118-a1)
 	ucidef_set_led_switch "lan" "lan" "green:lan" "switch0" "0x1f"

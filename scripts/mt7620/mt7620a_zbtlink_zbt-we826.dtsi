@@ -14,7 +14,7 @@
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "wled";
+				ralink,group = "wled", "jtag";
 				ralink,function = "gpio";
 			};
 		};
@@ -26,7 +26,20 @@
 		air {
 			label = "green:wifi";
 			gpios = <&gpio3 0 GPIO_ACTIVE_LOW>;
-			linux,default-trigger = "phy0tpt";
+			linux,default-trigger = "phy0tx";
+		};
+
+		wifi_5g {
+			label = "green:wifi";
+			gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "phy1tx";
+		};
+
+		usb {
+			label = "green:usb";
+			gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "netdev";
+			linux,default-device = "usb0";
 		};
 	};
 
