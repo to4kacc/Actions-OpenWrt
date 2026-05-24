@@ -17,6 +17,7 @@
 			label = "reset";
 			gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
+			debounce-interval = <60>;
 		};
 
 		uboot {
@@ -101,12 +102,12 @@
 	nvmem-cell-names = "eeprom";
 };
 
-&sdhci {
-	status = "disabled";
-};
-
 &pcie {
 	status = "okay";
+};
+
+&sdhci {
+	status = "disabled";
 };
 
 &gpio1 {
