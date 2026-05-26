@@ -67,7 +67,7 @@
 	flash0: flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-max-frequency = <25000000>;
+		spi-max-frequency = <10000000>;
 		broken-flash-reset;
 		m25p,fast-read;
 
@@ -136,8 +136,13 @@
 	nvmem-cell-names = "eeprom";
 };
 
-&pcie {
-	status = "okay";
+&pcie0 {
+	wifi@0,0 {
+		reg = <0x0000 0 0 0 0>;
+		reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
+		reset-assert-us = <150000>;
+		reset-deassert-us = <300000>;
+	};
 };
 
 &gpio1 {
