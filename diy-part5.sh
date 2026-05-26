@@ -3,13 +3,9 @@
 # Modify default IP
 sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_generate
 
-# luci-theme-aurora
-git clone https://github.com/eamonxg/luci-theme-aurora package/luci-theme-aurora
-
-
 # hlk7620A dts
 mkdir -p target/linux/ramips/dts/
-cp -f "$GITHUB_WORKSPACE/scripts/mt7620/mt7620a_zbtlink_zbt-we826.dtsi" "target/linux/ramips/dts/mt7620a_zbtlink_zbt-we826.dtsi"
+cp -f "$GITHUB_WORKSPACE/scripts/mt7620/mt7620a_zbtlink_zbt-we826-32m.dts" "target/linux/ramips/dts/mt7620a_zbtlink_zbt-we826-32m.dts"
 
 
 mkdir -p "target/linux/ramips/mt7620/base-files/etc/board.d/"

@@ -5,7 +5,8 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	compatible = "zbtlink,zbt-we826", "ralink,mt7620a-soc";
+	compatible = "zbtlink,zbt-we826-32m", "ralink,mt7620a-soc";
+	model = "Zbtlink ZBT-WE826 (32M)";
 
 	chosen {
 		bootargs = "console=ttyS0,115200";
@@ -34,6 +35,13 @@
 			gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy1tx";
 		};
+
+		usb {
+			label = "green:usb";
+			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "usbport";
+			trigger-sources = <&ohci_port1>, <&ehci_port1>;
+		};
 	};
 
 	keys {
@@ -59,7 +67,9 @@
 	flash0: flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-max-frequency = <10000000>;
+		spi-max-frequency = <25000000>;
+		broken-flash-reset;
+		m25p,fast-read;
 
 		partitions {
 			compatible = "fixed-partitions";
@@ -101,7 +111,7 @@
 			firmware: partition@50000 {
 				compatible = "denx,uimage";
 				label = "firmware";
-				/* reg property is set based on flash size in DTS files */
+				reg = <0x50000 0x1fb0000>;
 			};
 		};
 	};
