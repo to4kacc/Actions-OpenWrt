@@ -30,15 +30,15 @@ jobs:
         ./scripts/show_hardware_info.sh
 
     - name: Free Disk Space (Ubuntu)
-      uses: insightsengineering/disk-space-reclaimer@v1.1.2
+      uses: insightsengineering/disk-space-reclaimer@v1
       with:
-        tool-cache: false
         android: false
         dotnet: false
         haskell: false
         large-packages: false
-        docker-images: false
         swap-storage: false
+        docker-images: false
+        tools-cache: true
 
     - name: space usage check  
       run: |

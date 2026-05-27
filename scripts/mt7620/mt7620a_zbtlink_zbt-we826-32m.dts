@@ -32,13 +32,13 @@
 
 		air_5G {
 			label = "green:wifi 5G";
-			gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy1tx";
 		};
 
 		usb {
 			label = "green:usb";
-			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio2 3 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "usbport";
 			trigger-sources = <&ohci_port1>, <&ehci_port1>;
 		};
@@ -47,15 +47,9 @@
 	keys {
 		compatible = "gpio-keys";
 
-		reset {
-			label = "reset";
-			gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
-			linux,code = <KEY_RESTART>;
-		};
-
 		uboot {
 			label = "uboot";
-			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
@@ -138,11 +132,17 @@
 
 &pcie {
 	status = "okay";
-	reset-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+	reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
 };
 
 &gpio1 {
 	status = "okay";
+
+	wdt_rst_key {
+		gpio-hog;
+		gpios = <1 GPIO_ACTIVE_LOW>;
+		input;
+	};
 };
 
 &gpio2 {
