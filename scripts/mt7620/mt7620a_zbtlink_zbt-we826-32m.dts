@@ -15,7 +15,7 @@
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "wled", "jtag";
+				ralink,group = "wled", "jtag", "pcie";
 				ralink,function = "gpio";
 			};
 		};
@@ -138,6 +138,7 @@
 
 &pcie {
 	status = "okay";
+	reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
 };
 
 &gpio1 {
