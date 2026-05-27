@@ -49,7 +49,7 @@
 
 		uboot {
 			label = "uboot";
-			gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
@@ -136,12 +136,6 @@
 
 &gpio1 {
 	status = "okay";
-
-	wdt_rst_key {
-		gpio-hog;
-		gpios = <1 GPIO_ACTIVE_LOW>;
-		input;
-	};
 };
 
 &gpio2 {
