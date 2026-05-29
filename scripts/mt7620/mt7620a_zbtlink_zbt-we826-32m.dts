@@ -2,6 +2,7 @@
 
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
+#include <dt-bindings/leds/common.h>
 
 / {
 	compatible = "zbtlink,zbt-we826-32m", "ralink,mt7620a-soc";
@@ -14,7 +15,7 @@
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "wled", "jtag", "i2c";
+				ralink,group = "wled", "jtag";
 				ralink,function = "gpio";
 			};
 		};
@@ -25,19 +26,19 @@
 
 		air {
 			label = "green:wifi";
-			gpios = <&gpio2 8 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio3 0 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy0tx";
 		};
 
-		air_5g {
+		air_5G {
 			label = "green:wifi 5G";
-			gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy1tx";
 		};
 
 		usb {
 			label = "green:usb";
-			gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "usbport";
 			trigger-sources = <&ohci_port1>, <&ehci_port1>;
 		};
@@ -58,7 +59,7 @@
 &spi0 {
 	status = "okay";
 
-	flash@0 {
+	flash0: flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <40000000>;
@@ -82,7 +83,7 @@
 				read-only;
 			};
 
-			factory: partition@40000 {
+			partition@40000 {
 				label = "factory";
 				reg = <0x40000 0x10000>;
 				read-only;
@@ -123,18 +124,6 @@
 	status = "okay";
 };
 
-&gpio1 {
-	status = "okay";
-};
-
-&gpio2 {
-	status = "okay";
-};
-
-&gpio3 {
-	status = "okay";
-};
-
 &ethernet {
 	nvmem-cells = <&macaddr_factory_4>;
 	nvmem-cell-names = "mac-address";
@@ -160,4 +149,14 @@
 	};
 };
 
+&gpio1 {
+	status = "okay";
+};
 
+&gpio2 {
+	status = "okay";
+};
+
+&gpio3 {
+	status = "okay";
+};
