@@ -57,15 +57,16 @@ dlink,dir-810l|\
 trendnet,tew-810dr)
 	ucidef_set_led_switch "wan" "wan" "green:wan" "switch0" "0x10"
 	;;
-zbtlink,zbt-wr8305rt|\
+dlink,dwr-116-a1|\
 head-weblink,hdrm200|\
 ohyeah,oy-0001|\
 planex,mzk-ex300np|\
+zbtlink,zbt-wr8305rt|\
 zyxel,keenetic-lite-iii-a|\
 zyxel,keenetic-omni|\
 zyxel,keenetic-omni-ii|\
 zyxel,keenetic-viva)
-	ucidef_set_led_wlan "wifi_led" "wifi" "green:wifi" "phy0tx"
+	ucidef_set_led_netdev "wifi_led" "wifi" "green:wifi" "wlan0"
 	;;
 dlink,dwr-118-a1)
 	ucidef_set_led_switch "lan" "lan" "green:lan" "switch0" "0x1f"
@@ -129,8 +130,7 @@ engenius,esr600)
 	ucidef_set_led_netdev "wlan2g" "2.4GHz" "blue:wlan2g" "wlan1"
 	;;
 glinet,gl-mt300a|\
-glinet,gl-mt300n|\
-glinet,gl-mt750)
+glinet,gl-mt300n)
 	ucidef_set_led_netdev "wifi_led" "wifi" "wlan" "wlan0"
 	;;
 hiwifi,hc5661|\
@@ -262,6 +262,11 @@ wavlink,wl-wn535k1)
 wavlink,wl-wn579x3)
 	ucidef_set_led_switch "lan" "lan" "blue:lan" "switch0" "0x20"
 	ucidef_set_led_switch "wan" "wan" "blue:wan" "switch0" "0x10"
+	;;
+xiaomi,miwifi-mini)
+	ucidef_set_led_switch "lan1" "lan1" "green:lan1" "switch0" "0x02"
+	ucidef_set_led_switch "lan2" "lan2" "green:lan2" "switch0" "0x01"
+	ucidef_set_led_switch "wan" "wan" "green:wan" "switch0" "0x10"
 	;;
 zbtlink,zbt-ape522ii)
 	ucidef_set_led_netdev "wlan2g4" "wlan1-link" "green:wlan2g4" "wlan1"

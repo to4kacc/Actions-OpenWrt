@@ -4,20 +4,15 @@
 #include <dt-bindings/input/input.h>
 
 / {
-	compatible = "xiaomi,miwifi-mini", "ralink,mt7620a-soc";
-	model = "Xiaomi MiWiFi Mini";
+	compatible = "glinet,gl-mt750", "ralink,mt7620a-soc";
+	model = "GL-MT750";
+
+	aliases {
+		label-mac-device = &wmac;
+	};
 
 	chosen {
 		bootargs = "console=ttyS0,115200";
-	};
-
-	pinctrl {
-		state_default: pinctrl0 {
-			gpio {
-				ralink,group = "wled", "jtag", "i2c";
-				ralink,function = "gpio";
-			};
-		};
 	};
 
 	leds {
@@ -64,7 +59,8 @@
 	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-max-frequency = <50000000>;
+		spi-max-frequency = <40000000>;
+		broken-flash-reset;
 		m25p,fast-read;
 
 		partitions {
@@ -75,12 +71,12 @@
 			partition@0 {
 				label = "u-boot";
 				reg = <0x0 0x30000>;
-				read-only;
 			};
 
 			partition@30000 {
 				label = "u-boot-env";
 				reg = <0x30000 0x10000>;
+				read-only;
 			};
 
 			partition@40000 {
@@ -101,8 +97,8 @@
 						reg = <0x8000 0x200>;
 					};
 
-					macaddr_factory_28: macaddr@28 {
-						reg = <0x28 0x6>;
+					macaddr_factory_4: macaddr@4 {
+						reg = <0x4 0x6>;
 					};
 				};
 			};
@@ -116,6 +112,10 @@
 	};
 };
 
+&sdhci {
+	status = "okay";
+};
+
 &ehci {
 	status = "okay";
 };
@@ -125,13 +125,13 @@
 };
 
 &ethernet {
-	nvmem-cells = <&macaddr_factory_28>;
+	nvmem-cells = <&macaddr_factory_4000>;
 	nvmem-cell-names = "mac-address";
+
 	mediatek,portmap = "llllw";
 };
 
 &wmac {
-	status = "okay";
 	nvmem-cells = <&eeprom_factory_0>;
 	nvmem-cell-names = "eeprom";
 };
@@ -146,6 +146,5 @@
 		reg = <0x0000 0 0 0 0>;
 		nvmem-cells = <&eeprom_factory_8000>;
 		nvmem-cell-names = "eeprom";
-		ieee80211-freq-limit = <5000000 6000000>;
 	};
 };
