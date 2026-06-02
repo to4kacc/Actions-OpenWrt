@@ -16,9 +16,9 @@ on:
         type: boolean
 
 env:
-  CONFIG_FILE: 'config/istoreos.config'
-  REPO_URL: https://github.com/istoreos/istoreos
-  REPO_BRANCH: istoreos-24.10
+  CONFIG_FILE: 'config/openwrt-24.10.config'
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
   DIY_P7_SH: diy-part7.sh
   UPLOAD_FIRMWARE: true
