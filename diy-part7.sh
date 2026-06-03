@@ -12,5 +12,5 @@ mkdir -p "target/linux/ramips/mt7620/base-files/etc/board.d/"
 cp -f "$GITHUB_WORKSPACE/scripts/mt7620/01_leds" "target/linux/ramips/mt7620/base-files/etc/board.d/01_leds"
 
 # password
-sed -i 's/$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.//g' openwrt/package/lean/default-settings/files/zzz-default-settings
+sed -i 's/$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.//g' ${{ github.workspace }}/openwrt/package/lean/default-settings/files/zzz-default-settings
 
