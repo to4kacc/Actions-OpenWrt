@@ -1,4 +1,4 @@
-name: Build_imm_docker
+name: Build_imm_HLK_7628N
 
 on:
   repository_dispatch:
@@ -18,7 +18,7 @@ on:
 env:
   CONFIG_FILE: 'config/hlk7628n.config'
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: master
+  REPO_BRANCH: openwrt-18.06
   FEEDS_CONF: feeds.conf.default
   DIY_P3_SH: diy-part3.sh
   UPLOAD_FIRMWARE: true
@@ -33,54 +33,114 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: 拉取 Ubuntu 18.04 镜像
-      run: docker pull ubuntu:18.04
+    - name: Show hardware info
+      run: |
+        chmod 755 ./scripts/show_hardware_info.sh
+        ./scripts/show_hardware_info.sh
 
-    - name: 在 Ubuntu 18.04 容器里编译
+    - name: Free Disk Space (Ubuntu)
+      uses: insightsengineering/disk-space-reclaimer@v1.1.2
+      with:
+        android: false
+        dotnet: false
+        haskell: false
+        large-packages: false
+        swap-storage: false
+        docker-images: false
+        tools-cache: true
+
+    - name: space usage check
+      run: df -H
+
+    - name: mkbootimg build
+      run: |
+        wget https://github.com/xuxin1955/depend_ubuntu2204_openwrt/releases/download/ubuntu_26.04_LTS_mkbootimg/mkbootimg_34.0.5-12build1_all.deb
+        sudo dpkg -i mkbootimg_34.0.5-12build1_all.deb || sudo apt-get install -f -y
+        mkbootimg --help || true
+        sudo timedatectl set-timezone "${TZ}"
+
+    - name: Clone source code
+      id: codes
+      run: |
+        git clone "$REPO_URL" -b "$REPO_BRANCH" openwrt
+        cd openwrt
+        git pull origin "$REPO_BRANCH"
+        git log --oneline -1
+        cd ..
+        echo "status=success" >> "$GITHUB_OUTPUT"
+
+    - name: Free up disk space
+      run: |
+        sudo mkdir -p /mnt/openwrt/{dl,staging_dir,build_dir}
+        sudo chown -R $USER:$GROUPS /mnt/openwrt
+        ln -sfn /mnt/openwrt/dl openwrt/dl
+        ln -sfn /mnt/openwrt/staging_dir openwrt/staging_dir
+        ln -sfn /mnt/openwrt/build_dir openwrt/build_dir
+        df -H
+
+    - name: feeds DIY_P3_SH
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        chmod +x $DIY_P3_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P3_SH
+
+    - name: Update & Install feeds
+      working-directory: ./openwrt
+      run: |
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a -f
+
+    - name: remove warning
+      run: |
+        chmod 755 $GITHUB_WORKSPACE/scripts/diy-part.sh
+        $GITHUB_WORKSPACE/scripts/diy-part.sh
+
+    - name: Configuration Customization
+      run: |
+        cp -fv "${CONFIG_FILE}" openwrt/.config
+        cd openwrt && make defconfig
+
+    # ✅ 只在编译阶段用 18.04 容器
+    - name: Compile the OpenWrt (Ubuntu 18.04)
       id: compile
       run: |
         docker run --rm \
           -v ${{ github.workspace }}:/workspace \
-          -w /workspace \
+          -w /workspace/openwrt \
           ubuntu:18.04 \
           bash -c "
             set -e
             export DEBIAN_FRONTEND=noninteractive
             apt-get update
             apt-get install -y \
-              git wget curl build-essential libncurses5-dev gawk \
-              libssl-dev gettext zlib1g-dev swig unzip python3 python3-pip jq
+              build-essential libncurses5-dev gawk git libssl-dev \
+              gettext zlib1g-dev swig unzip python3 python3-pip
 
-            cd /workspace
-
-            echo '>>> 克隆源码'
-            git clone ${{ env.REPO_URL }} -b ${{ env.REPO_BRANCH }} openwrt
-            cd openwrt
-            git log --oneline -1
-
-            echo '>>> 更新 feeds'
-            ./scripts/feeds update -a
-            ./scripts/feeds install -a -f
-
-            echo '>>> 应用配置'
-            cp -fv /workspace/${{ env.CONFIG_FILE }} .config
             make defconfig
+            if make -j\$(nproc); then
+              echo Compile success
+            else
+              echo Compile failed, retry with debug log...
+              make -j4 V=s
+            fi
 
-            echo '>>> 下载包'
-            make download -j8
-            find dl -size -1024c -delete
-
-            echo '>>> 编译'
-            make -j$(nproc) || make -j4 V=s
-
-            echo '>>> 生成设备名'
             grep '^CONFIG_TARGET.*DEVICE.*=y' .config \
               | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           "
 
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: 上传固件
+    - name: 自动上传最新源码生成.config编译配置
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-config
+        path: |
+          ${{ github.workspace }}/openwrt/.config
+          ${{ github.workspace }}/openwrt/feeds.conf.default
+        include-hidden-files: true
+
+    - name: Upload firmware directory
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true'
       uses: actions/upload-artifact@v4
       with:
