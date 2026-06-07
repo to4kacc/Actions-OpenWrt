@@ -17,8 +17,8 @@ on:
 
 env:
   CONFIG_FILE: 'config/gl-mt750.config'
-  REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: main
+  REPO_URL: https://github.com/x-wrt/x-wrt
+  REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   DIY_P7_SH: diy-part7.sh
   UPLOAD_FIRMWARE: true
