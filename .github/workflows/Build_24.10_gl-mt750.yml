@@ -1,4 +1,4 @@
-name: Build_LEDE_gl-mt750
+name: Build_24.10_gl-mt750
 
 on:
   repository_dispatch:
@@ -16,9 +16,9 @@ on:
         type: boolean
 
 env:
-  CONFIG_FILE: 'config/gl-mt750.config'
-  REPO_URL: https://github.com/xuxin1955/lede
-  REPO_BRANCH: master
+  CONFIG_FILE: 'config/mt750.config'
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-24.10
   FEEDS_CONF: feeds.conf.default
   DIY_P7_SH: diy-part7.sh
   UPLOAD_FIRMWARE: true
@@ -27,7 +27,7 @@ env:
   
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Checkout
