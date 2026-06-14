@@ -1,4 +1,4 @@
-name: Build_HLK-7628N_1407_Final_Logic
+name: Build_1407_Final_Logic
 
 on:
   repository_dispatch:
