@@ -121,10 +121,6 @@
 	status = "okay";
 };
 
-&ohci {
-	status = "okay";
-};
-
 &ethernet {
 	nvmem-cells = <&macaddr_factory_4>;
 	nvmem-cell-names = "mac-address";
